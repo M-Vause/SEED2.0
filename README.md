@@ -1,5 +1,5 @@
 # SEED 2.0
- 
+
 **SEED**: **S**oftware for the **E**xtraction of **E**quations from **D**ata
 
 ## Table of contents
@@ -32,7 +32,7 @@ As well as the base Python installation, it is vital to install the Python modul
 
 * Windows:
 
-> _python -m pip install --user numpy matplotlib pysindy scipy_
+> _python -m pip install numpy matplotlib pysindy scipy_
 
 You can also use SEED 2.0 through Jupyter Notebook. A _.ipynb_ file is included as well as the _.py_ file. The code is the same. Before running SEED 2.0 in Jupyter Notebook, it is vital to install the above Python modules needed for the programme to run.
 
