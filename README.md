@@ -28,11 +28,11 @@ As well as the base Python installation, it is vital to install the Python modul
 
 * Mac: 
 
-> _python3 -m pip install --user Some modules_
+> _python3 -m pip install numpy matplotlib pysindy scipy_
 
 * Windows:
 
-> _python -m pip install --user Some modules_
+> _python -m pip install --user numpy matplotlib pysindy scipy_
 
 You can also use SEED 2.0 through Jupyter Notebook. A _.ipynb_ file is included as well as the _.py_ file. The code is the same. Before running SEED 2.0 in Jupyter Notebook, it is vital to install the above Python modules needed for the programme to run.
 
@@ -42,7 +42,7 @@ After following the above steps, download the source files from GitHub, save all
 ## Usage
 
 ### Running SEED
-To run SEED, open the Python IDLE (included with the Python download) and open the file _SEED.py_. Click _Run > Run Module_ on the toolbar to run the software. If running SEED through Jupyter Notebook, open _SEED.ipynb_ in a Jupyter Notebook server and run all lines of code. 
+To run SEED, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software. If running SEED through Jupyter Notebook, open _SEED2\_0.ipynb_ in a Jupyter Notebook server and run all lines of code. 
 
 The GUI will start up and will look like this:
 
@@ -87,7 +87,4 @@ As well as the current features of PySINDy integrated into SEED 2.0, there are a
 * Integrating SINDy with control
 
 ## License
-The MIT License is used for this software. For more information see: [License info](https://github.com/M-Vause/SEED/blob/master/LICENSE)
-
-
-
+The MIT License is used for this software. For more information see: [License info](https://github.com/M-Vause/SEED2.0/blob/master/LICENSE)
