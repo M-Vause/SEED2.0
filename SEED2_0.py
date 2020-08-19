@@ -485,7 +485,7 @@ if platform == "darwin": # MacOS
     print("MacOS detected")
     min_w = 520
     max_w = 1200
-    min_h = 590
+    min_h = 550
     max_h = 680
     drop_w = 30
     fram_w = 62
@@ -496,9 +496,9 @@ if platform == "darwin": # MacOS
     adv_size = "1050x610"
 else:
     print(platform + " detected")
-    min_w = 1000
-    max_w = 1370
-    min_h = 500
+    min_w = 690
+    max_w = 1400
+    min_h = 610
     max_h =700
     drop_w = 30
     fram_w = 55
@@ -506,7 +506,7 @@ else:
     col_width = 160
     fig_w = 720
     fig_h = 450
-    adv_size = "1050x610"
+    adv_size = "1380x670"
 
 # GUI window
 window = tk.Tk()
@@ -661,7 +661,7 @@ blank_line2.grid(row=2,column=0,columnspan=4)
 comp_button = tk.Button(button_fram,text="Compute",font=("Times",15,"bold"),width=10,highlightbackground=bgc,command=comp)
 comp_button.grid(row=3,column=0,columnspan=4,sticky="EW")
 
-button_fram.grid(row=7,column=0,rowspan=4,columnspan=4,padx=5,sticky="SEW")
+button_fram.grid(row=7,column=0,columnspan=4,padx=5,sticky="SEW")
 
 # Frame for optimization option variable selection
 opt_fram = tk.Frame(window,bd=2,bg=bgc,width=5)
