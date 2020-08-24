@@ -52,7 +52,7 @@ The GUI will start up and will look like this:
 
 * Windows:
 
-![GUI win](GUI_win.png)
+![GUI win](images/GUI_win.png)
 
 After launching SEED 2.0, you can then select your data file and press the _Compute_ button to obtain your output equations.
 
@@ -69,7 +69,7 @@ The second, called _random\_5d.csv_, contains five variables of randomly generat
 In order to use your own data with SEED 2.0, you must save the data as a _.csv_ file with one column of time series data, and further columns containing the data for each recorded variable. The first row of your _.csv_ file must be the names of each variable.  
 An example of a three variable system is shown below:
 
-![own data](Own_Data.png)
+![own data](images/Own_Data.png)
 
 There are two ways to run SEED 2.0 with your own data file.
 
