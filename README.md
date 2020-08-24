@@ -48,7 +48,7 @@ The GUI will start up and will look like this:
 
 * Mac:
 
-![GUI mac](GUI_mac.png)
+![GUI mac](images/GUI_mac.png)
 
 * Windows:
 
