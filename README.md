@@ -8,7 +8,7 @@
 	* [Prerequisite](#prerequisite)
 	* [Installing](#installing)
 * [Usage](#usage)
-	* [Running SEED](#running-SEED)
+	* [Running SEED 2.0](#running-SEED)
 	* [Examples](#examples)
 	* [Using your own data](#using-your-own-data)
 * [Future developments](#future-developments)
@@ -41,8 +41,8 @@ After following the above steps, download the source files from GitHub, save all
 
 ## Usage
 
-### Running SEED
-To run SEED, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software. If running SEED through Jupyter Notebook, open _SEED2\_0.ipynb_ in a Jupyter Notebook server and run all lines of code. 
+### Running SEED 2.0
+To run SEED 2.0, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software. If running SEED through Jupyter Notebook, open _SEED2\_0.ipynb_ in a Jupyter Notebook server and run all lines of code. 
 
 The GUI will start up and will look like this:
 
@@ -63,7 +63,7 @@ There are two datasets that come with the SEED 2.0 download.
 
 The first, called _data\_Lorenz3d.csv_, contains the data for a three dimensional lorenz system, generated from the [feature overview](https://github.com/dynamicslab/pysindy/blob/master/examples/1_feature_overview.ipynb) example file from the [PySINDy](https://github.com/dynamicslab/pysindy) GitHub repository. 
 
-The second, called _random\_3d.csv_, contains three variables of randomly generated data. This is to show an example of the output of SEED 2.0 when a system with no underlying relationship is tested. It is clear that the SINDy algorithm can't settle on sparse coefficients to represent the model.
+The second, called _random\_5d.csv_, contains five variables of randomly generated data. This is to show an example of the output of SEED 2.0 when a system with no underlying relationship is tested. It is clear that the SINDy algorithm can't settle on sparse coefficients to represent the model.
 
 ### Using your own data
 In order to use your own data with SEED 2.0, you must save the data as a _.csv_ file with one column of time series data, and further columns containing the data for each recorded variable. The first row of your _.csv_ file must be the names of each variable.  
@@ -75,7 +75,7 @@ There are two ways to run SEED 2.0 with your own data file.
 
 The first is to select _Own Data_ in the _Example/Own Data_ dropdown selection box on the main panel of the GUI, then using the file browser, you can then select the file containing your data.
 
-You can also save the data file in the data folder containing the example data files that came with the SEED 2.0 download.
+You can also save the data file in the data folder containing the example data files that came with the SEED 2.0 download, then select it in the dropdown after running SEED 2.0.
 
 ## Future Developments
 As well as the current features of PySINDy integrated into SEED 2.0, there are a number of features currently in development to be released in the near future. This includes but is not limited to:
