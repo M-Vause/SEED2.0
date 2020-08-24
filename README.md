@@ -17,7 +17,7 @@
 ## Introduction
 SEED 2.0 is a software written in Python that allows for the extraction of governing differential equations from data. It has been written with use of the [PySINDy](https://github.com/dynamicslab/pysindy) package, written by Brian de Silva et al.
 
-SEED has a simple and intuitive Graphical User Interface (GUI) so that researchers in a wide variety of fields, without needing to know any programming, can analyse their data using cutting edge methods.
+SEED 2.0 has a simple and intuitive Graphical User Interface (GUI) so that researchers in a wide variety of fields, without needing to know any programming, can analyse their data using cutting edge methods.
 
 ## Getting Started
 
@@ -26,11 +26,11 @@ In order to run SEED 2.0, the user must have a current Python installation, that
 
 As well as the base Python installation, it is vital to install the Python modules needed for the programme to run. You can do this by running these commands in the terminal or command line:
 
-* Mac: 
+* Mac - terminal: 
 
 > _python3 -m pip install numpy matplotlib pysindy scipy_
 
-* Windows:
+* Windows - command line:
 
 > _python -m pip install numpy matplotlib pysindy scipy_
 
