@@ -520,7 +520,7 @@ if (not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unveri
     ssl._create_default_https_context = ssl._create_unverified_context
 
 try:
-    pic_url = "https://raw.githubusercontent.com/M-Vause/SEED2.0/master/DurhamUniversityMasterLogo_RGB.png"
+    pic_url = "https://github.com/M-Vause/SEED2.0/blob/master/images/DurhamUniversityMasterLogo_RGB.png?raw=true"
     my_page = urlopen(pic_url)
     my_picture = io.BytesIO(my_page.read())
     pil_img = Image.open(my_picture)
