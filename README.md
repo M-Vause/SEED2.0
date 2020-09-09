@@ -102,6 +102,7 @@ As well as the current features of PySINDy integrated into SEED 2.0, there are a
 * The ability to combine feature librarys
 * Integrating SINDy with control
 * The usage of different forms of input data, as shown on the PySINDy [feature overview](https://github.com/dynamicslab/pysindy/blob/master/examples/1_feature_overview.ipynb)
+* Adding tooltips explaining each of the options
 
 ## License
 The MIT License is used for this software. For more information see: [License info](https://github.com/M-Vause/SEED2.0/blob/master/LICENSE)
