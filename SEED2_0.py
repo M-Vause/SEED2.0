@@ -550,6 +550,14 @@ def show_plots(contents, sim_data, coefs, feats, time_series, variable_names):
         axs[dim].axhline(y=0, color='k')
         axs[dim].set_title("d" + str(variable_names[i]) + "/dt",size=10)
 
+        # If the number of output coefficients is greater than 6, change the font size to 8
+        if len(coef_plt) > 6:
+            size = 8
+        else:
+            size = 10
+        plot_label = axs[dim].get_xticklabels() # Get all of the font label objects for the subplot
+        [each_label.set_fontsize(size) for each_label in plot_label] # Set the font size of the specific subplot
+
     fig.subplots_adjust(hspace=0.3) # Add vertical space in between each row of subplots so they don't overlap
     fig.tight_layout() # Remove excess whitespace from the top and bottom of the figure
 
