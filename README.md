@@ -11,6 +11,7 @@
 	* [Running SEED 2.0](#running-SEED)
 	* [Examples](#examples)
 	* [Using your own data](#using-your-own-data)
+* [Model Output](#model-output)
 * [Future developments](#future-developments)
 * [License](#license)
 
@@ -22,27 +23,27 @@ SEED 2.0 has a simple and intuitive Graphical User Interface (GUI) so that resea
 ## Getting Started
 
 ### Prerequisite
+Currently, SEED 2.0 has only been tested on Windows and MacOS. Although it may be able to run on other operating systems, results may vary.
+
 In order to run SEED 2.0, the user must have a current Python installation, that can be downloaded from the [Python website](https://www.python.org/downloads/).
 
 As well as the base Python installation, it is vital to install the Python modules needed for the programme to run. You can do this by running these commands in the terminal or command line:
 
 * Mac - terminal: 
 
-> _python3 -m pip install numpy matplotlib pysindy scipy_
+> _python3 -m pip install matplotlib pysindy pandas PyQt5_
 
 * Windows - command line:
 
-> _python -m pip install numpy matplotlib pysindy scipy_
-
-You can also use SEED 2.0 through Jupyter Notebook. A _.ipynb_ file is included as well as the _.py_ file. The code is the same. Before running SEED 2.0 in Jupyter Notebook, it is vital to install the above Python modules needed for the programme to run.
+> _python -m pip install matplotlib pysindy pandas_
 
 ### Installing
-After following the above steps, download the source files from GitHub, save all of the files in the same folder anywhere you would like.
+After following the above steps to install the required Python modules, download the source files from GitHub, save all of the files in the same folder anywhere you would like.
 
 ## Usage
 
 ### Running SEED 2.0
-To run SEED 2.0, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software. If running SEED through Jupyter Notebook, open _SEED2\_0.ipynb_ in a Jupyter Notebook server and run all lines of code. 
+To run SEED 2.0, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software.
 
 The GUI will start up and will look like this:
 
@@ -65,6 +66,8 @@ The first, called _data\_Lorenz3d.csv_, contains the data for a three dimensiona
 
 The second, called _random\_5d.csv_, contains five variables of randomly generated data. This is to show an example of the output of SEED 2.0 when a system with no underlying relationship is tested. It is clear that the SINDy algorithm can't settle on sparse coefficients to represent the model.
 
+The ability to generate your own dataset is also built into SEED 2.0. Just select the _Generate Lorenz Data_ option in the _Example/ Own Data_ dropdown menu. After pressing compute, a window will pop up containing the inital Lorenz conditions of the _data\_Lorenz3d.csv_ data. You can then edit the conditions to generate your own system. After pressing _Continue_, SEED 2.0 will generate the system, and compute its output.
+
 ### Using your own data
 In order to use your own data with SEED 2.0, you must save the data as a _.csv_ file with one column of time series data, and further columns containing the data for each recorded variable. The first row of your _.csv_ file must be the names of each variable.  
 An example of a three variable system is shown below:
@@ -77,14 +80,28 @@ The first is to select _Own Data_ in the _Example/Own Data_ dropdown selection b
 
 You can also save the data file in the data folder containing the example data files that came with the SEED 2.0 download, then select it in the dropdown after running SEED 2.0.
 
+## Model Output
+After pressing compute, SEED 2.0 uses the selections on the main GUI window to make a PySINDy model using the selected data. The first output window displays the output sparse coefficients in a table, and automatically forms the output equations. It also calculates and displays the model score, an inbuilt feature to PySINDy. An example of this window, on MacOS, can be seen below:
+
+![output window 1](images/window1.png)
+
+The second output window displays two sets of plots. The first set shows the coefficients for each output equation in bar plots to easily visualise which terms in each equation are more important. The second set of plots shows the selected input data plotted against simulated data, created using the input data's initial conditions, evolved using the model's output equations. This can be seen below:
+
+![output window 2](images/window2.png)
+
+Pressing the save button on this window saves both a _.png_ of the output plots and a _.csv_ of the output coefficient matrix to the filepath selected.
+
+Both example output windows are the MacOS versions. On Windows, only systems of up to three dimensions are plotted due to an issue with the figure plotting. A fix is being worked on.
+
 ## Future Developments
 As well as the current features of PySINDy integrated into SEED 2.0, there are a number of features currently in development to be released in the near future. This includes but is not limited to:
 
 * Integration of the Lasso method for system optimization
-* Saving the output model to a file
+* Loading a previous model from the saved .csv file
 * The ability to use a custom feature library
 * The ability to combine feature librarys
 * Integrating SINDy with control
+* The usage of different forms of input data, as shown on the PySINDy [feature overview](https://github.com/dynamicslab/pysindy/blob/master/examples/1_feature_overview.ipynb)
 
 ## License
 The MIT License is used for this software. For more information see: [License info](https://github.com/M-Vause/SEED2.0/blob/master/LICENSE)
