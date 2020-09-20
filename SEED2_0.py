@@ -24,14 +24,14 @@ try:
     from math import ceil
     import matplotlib
     import matplotlib.pyplot as plt
-    matplotlib.use('Qt5Agg') 
-    from PyQt5 import QtWidgets 
+    matplotlib.use('Qt5Agg')
+    from PyQt5 import QtWidgets
     from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # To allow for scrolling of the output plot window, the figure needs to be embedded into a FigureCanvas
     from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar # Needed to add a custom save output button to the output plot window
     import pandas as pd # Used when saving the output coefficient matrix to a .csv file
 except ImportError as mod: # If the user didn't install the required modules beore trying to run SEED 2.0
     print("Install the required modules before starting:\n" + str(mod))
-    tk.messagebox.showerror(title="Module Import Error", message="Install the required modules before starting:\n" + str(mod))
+    messagebox.showerror(title="Module Import Error", message="Install the required modules before starting:\n" + str(mod))
     sys.exit()
 except Exception as err: # Any other exception that should occur (nothing else should happen, hence generalising all other exceptions)
     print("Error while importing:\n" + str(err))
@@ -52,22 +52,6 @@ diff_widgets = [] # Storing information for the advanced differentiation option 
                         #for other variables: [label widget with name of variable,type of variable,entry box widget with input value from GUI]
 
                         #When the item is "type of variable", that means the type of the inbuilt variable in the actual optimization/differentiation class
-
-# The toolbar buttons to include on the output plot graphs - The inbuilt save button is removed as the implementation of PyQT5 causes pressing it to crash Python. Another is manually added later
-
-# If the user uses MacOS, remove the save button from the output plot - it is broken in this OS
-if(platform == "darwin"):
-    NavigationToolbar.toolitems = (
-        ('Home', 'Reset original view', 'home', 'home'),
-        ('Back', 'Back to  previous view', 'back', 'back'),
-        ('Forward', 'Forward to next view', 'forward', 'forward'),
-        (None, None, None, None),
-        ('Pan', 'Pan axes with left mouse, zoom with right', 'move', 'pan'),
-        ('Zoom', 'Zoom to rectangle', 'zoom_to_rect', 'zoom'),
-        ('Subplots', 'Configure subplots', 'subplots', 'configure_subplots'),
-        (None, None, None, None),
-        #('Save', 'Save the figure', 'filesave', 'save_figure'),
-    )
 
 # Any functions used throughout SEED 2.0
 
@@ -561,51 +545,71 @@ def show_plots(contents, sim_data, coefs, feats, time_series, variable_names):
     fig.subplots_adjust(hspace=0.3) # Add vertical space in between each row of subplots so they don't overlap
     fig.tight_layout() # Remove excess whitespace from the top and bottom of the figure
 
-    # If the user is not using MacOS, show the figure. I couldn't get PyQt5 to work in Windows. Remap the save button to call the bespoke save function below. Only show for systems with fewer than 4 dimensions as the figure would be too large.
-    if(not (platform == "darwin") and len(variable_names) <4):
-        manager = plt.get_current_fig_manager()
-        manager.toolbar.actions()[8].triggered.disconnect()
-        manager.toolbar.actions()[8].triggered.connect(lambda: save_output(fig, coefs, feats, variable_names))
+    # The if statement (only the next line) is a temporary fix as the following scrollbar code doesn't work, however the contents of the statement should be kept when fixed
+    if(len(variable_names) <4):
+        try:
+            manager = plt.get_current_fig_manager() # Get the current figure manager
+            item_text = [widget_object.iconText() for widget_object in manager.toolbar.actions()] # Get the text of each of the widgets in the ouput plot's toolbar
+            pos = item_text.index("Save") # The index number of the save button in the toolbar items on the output plot
 
-        fig.show()
-        return None
+            # Remap pressing the save button to the custom "save_output" function
+            manager.toolbar.actions()[pos].triggered.disconnect()
+            manager.toolbar.actions()[pos].triggered.connect(lambda: save_output(fig, coefs, feats, variable_names))
 
-    # Create the Qt widget to embed the figure canvas into
-    widget = QtWidgets.QWidget()
-    widget.setLayout(QtWidgets.QVBoxLayout())
-    widget.layout().setContentsMargins(0,0,0,0)
-    widget.layout().setSpacing(0)
+            fig.show() # This line is also temporary so that systems with a small number of dimensions can be displayed. The number is capped to 3 dims as larger systems would be too large to be displayed
+        except Exception: # Catch an exception if something goes wrong remapping the save button
+            messagebox.showerror(title="Output Plot Error", message="Error displaying the output plots.")
+            return None
 
-    # Embed the figure in a canvas and create the scrollbar that enables if the canvas is larger than the Qt widget area
-    canvas = FigureCanvas(fig)
-    canvas.draw()
-    scroll = QtWidgets.QScrollArea(widget)
-    scroll.setWidget(canvas)
+    ### The following code should work to embed the figure into a scrollable PyQt5 window, although I'm unsure as to why it doesn't. For now I have commented it out, but it should be looked at
+
+    # # Create the Qt widget to embed the figure canvas into
+    # qapp = QtWidgets.QApplication([])
+
+    # widget = QtWidgets.QWidget()
+    # widget.setLayout(QtWidgets.QVBoxLayout())
+    # widget.layout().setContentsMargins(0,0,0,0)
+    # widget.layout().setSpacing(0)
+
+    # # Embed the figure in a canvas and create the scrollbar that enables if the canvas is larger than the Qt widget area
+    # canvas = FigureCanvas(fig)
+    # canvas.draw()
+    # scroll = QtWidgets.QScrollArea(widget)
+    # scroll.setWidget(canvas)
     
-    # Obtain the navigation toolbar object and add this and the scrollbar to the Qt widget
-    nav = NavigationToolbar(canvas, widget)
-    widget.layout().addWidget(nav)
-    widget.layout().addWidget(scroll)
+    # # Obtain the navigation toolbar object and add this and the scrollbar to the Qt widget
+    # nav = NavigationToolbar(canvas, widget)
+    # widget.layout().addWidget(nav)
+    # widget.layout().addWidget(scroll)
 
-    # Create a bespoke save button widget that saves a .png of the figure, and a .csv of the coefficient matrix
-    save_button = QtWidgets.QPushButton()
-    nav.addWidget(save_button) # Add save button to the Qt widget
-    save_button.setText("Save Output")
-    save_button.clicked.connect(lambda: save_output(fig, coefs, feats, variable_names)) # Bind pressing the save button with the save function
+    # # Create a bespoke save button widget that saves a .png of the figure, and a .csv of the coefficient matrix
+    # save_button = QtWidgets.QPushButton()
+    # nav.addWidget(save_button) # Add save button to the Qt widget
+    # save_button.setText("Save Output")
+    # save_button.clicked.connect(lambda: save_output(fig, coefs, feats, variable_names)) # Bind pressing the save button with the save function
 
-    # Set Qt widget height to (number of rows on figure)*215, or a default of 645 (fig_h) if there are greater than 3 rows on the figure
-    if(len(variable_names) < 3):
-        height = len(variable_names)*(fig_h/3)
-    else:
-        height = fig_h
+    # # Set Qt widget height to (number of rows on figure)*215, or a default of 645 (fig_h) if there are greater than 3 rows on the figure
+    # if(len(variable_names) < 3):
+    #     height = len(variable_names)*(fig_h/3)
+    # else:
+    #     height = fig_h
 
-    widget.setMaximumWidth(fig_w) # Set the width of the Qt widget to the width of the figure
-    widget.resize(fig_w,int(height))
-    widget.show() # Show the final Qt widget
+    # widget.setMaximumWidth(fig_w) # Set the width of the Qt widget to the width of the figure
+    # widget.resize(fig_w,int(height))
+
+    # # Show the final Qt window
+    # widget.show() 
+    # qapp.exec_()
+    # sys.exit(qapp.exec_()) 
 
 # Save the output figure & coefficient matrix to file
 def save_output(fig, coefs, feats, variable_names):
     save_filepath = fd.asksaveasfilename() # The file browser popup that return the filepath the user would like to save to
+
+    # Exit the saving code if the user cancels the save or doesn't give the file a name
+    if(save_filepath == ""):
+        return None
+
     fig.savefig(save_filepath) # Save the figure as a .png
 
     total = np.append([feats], coefs, axis=0) # Adds the descriptors to the output coefficient matrix
@@ -622,21 +626,21 @@ def comp():
 
     # Stop the computation if "Own Data" is selected and no file has been selected
     if((to_open.split('/')[-1] == "" or to_open.split('/')[-1] == " ") and sel_var.get() == "Own Data"):
-        tk.messagebox.showerror(title="Select File", message="You need to select a file to compute!")
+        messagebox.showerror(title="Select File", message="You need to select a file to compute!")
         return None
 
     # Try to instantiate the optimizer with the advanced variables. Stop the computation if an invalid variable is input (will throw an error when instantiating)
     try:
         opt = od_inst(opt_widgets,"opt")
     except Exception:
-        tk.messagebox.showerror(title="Invalid Option", message="You have input an invalid optimization variable, check the PySINDy documentation for valid options.\n\nExiting the data generation.")
+        messagebox.showerror(title="Invalid Option", message="You have input an invalid optimization variable, check the PySINDy documentation for valid options.\n\nExiting the computation.")
         return None
 
     # Try to instantiate the differentiator with the advanced variables. Stop the computation if an invalid variable is input (will throw an error when instantiating)
     try:
         diff = od_inst(diff_widgets,"diff")
     except Exception:
-        tk.messagebox.showerror(title="Invalid Option", message="You have input an invalid differentation variable, check the PySINDy documentation for valid options.\n\nExiting the data generation.")
+        messagebox.showerror(title="Invalid Option", message="You have input an invalid differentation variable, check the PySINDy documentation for valid options.\n\nExiting the computation.")
         return None
 
     # Instatiate the feature library
@@ -648,7 +652,7 @@ def comp():
             contents, dt, points_no, time_series = lorenz_gen()
             window_name = window_name + ", Number of points: " + str(points_no)
         except Exception:
-            tk.messagebox.showerror(title="Invalid Condition", message="You have input an invalid condition. \n\nExiting the data generation.")
+            messagebox.showerror(title="Invalid Condition", message="You have input an invalid condition. \n\nExiting the data generation.")
             return None
 
         variable_names = ["x","y","z"] # Default system variable names if "Generate Lorenz System" is selected
@@ -665,7 +669,7 @@ def comp():
         contents = [val[1:] for val in contents] # Remove the time series data from the data matrix
         contents = np.array([[float(val) for val in item] for item in contents]) # Turn the list of lists into a numpy array as this is what the PySINDy model expects as an input
     else: # If the selected file isn't a .csv file, stop the computation
-        tk.messagebox.showerror(title="Invalid File Type", message="The selected file needs to be a .csv file in the correct format. Read to tutorial for more information.\n\nExiting the computation.")
+        messagebox.showerror(title="Invalid File Type", message="The selected file needs to be a .csv file in the correct format. Read to tutorial for more information.\n\nExiting the computation.")
         return None
 
     model = ps.SINDy(optimizer=opt,differentiation_method=diff,feature_library=feat,feature_names=variable_names) # Instantiate the model with the previously obtained instances and variable names
@@ -815,6 +819,8 @@ if "__init__.py" in temp_options:
     temp_options.remove("__init__.py")
 if "base.py" in temp_options:
     temp_options.remove("base.py")
+if "sindy_derivative.py" in temp_options: # This came in a PySINDy update at the end of the project, support for this options needs to be added
+    temp_options.remove("sindy_derivative.py")
 ext = ".py"
 diff_options = [eg.split(ext, 1)[0] for eg in temp_options] # Remove the extension from all of the remaining options
 diff_options.sort()
