@@ -24,10 +24,7 @@ try:
     from math import ceil
     import matplotlib
     import matplotlib.pyplot as plt
-    matplotlib.use('Qt5Agg')
-    from PyQt5 import QtWidgets
-    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas # To allow for scrolling of the output plot window, the figure needs to be embedded into a FigureCanvas
-    from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar # Needed to add a custom save output button to the output plot window
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
     import pandas as pd # Used when saving the output coefficient matrix to a .csv file
 except ImportError as mod: # If the user didn't install the required modules beore trying to run SEED 2.0
     print("Install the required modules before starting:\n" + str(mod))
@@ -297,7 +294,7 @@ def show_output(table_size, coefs, feats, variable_names, window_name, score):
     score_label = tk.Label(out_window,text="Model Score: "+str(score),font=("Times",15),bg=bgc) # Create and display the ouput model score
     score_label.grid(row=7,column=0,sticky="W")
 
-    out_window.mainloop()
+    return out_window
 
 # Create output table
 def create_table(out_window, table_size, variable_names):
@@ -498,8 +495,26 @@ def update_number(event, dt_entry, time_entry1, time_entry2, points_label):
         print("Error!\n" + str(e))
 
 # Display the figure with the original data vs obtained model
-def show_plots(contents, sim_data, coefs, feats, time_series, variable_names):
-    fig, axs = plt.subplots(contents.shape[1], 2, sharex=False, sharey=False, figsize=(11, 2*len(variable_names))) # Create the figure and correct number of subplots
+def show_plots(contents, sim_data, coefs, feats, time_series, variable_names, window_name):
+    # Create plot window
+    plot_window = tk.Tk()
+    plot_window.title("Model Plots: " + str(window_name))
+    plot_window.maxsize(fig_w, fig_h)
+
+    # This is here so that resizing the window doesn't resize the plot
+    plot_window.rowconfigure(1, weight=1)
+    plot_window.columnconfigure(1, weight=1)
+
+    # Create the frame for the plot and scrollbars
+    canvas_frame = tk.Frame(plot_window)
+    canvas_frame.grid(column=1, row=1, sticky=tk.constants.NSEW)
+    canvas_frame.rowconfigure(1, weight=1)
+    canvas_frame.columnconfigure(1, weight=1)
+
+    # Create a figure with the correct number of subplots
+    fig, axs = plt.subplots(contents.shape[1], 2, sharex=False, sharey=False, figsize=(11, 2*len(variable_names)))
+
+    # Plot the data on the subplots
     for i in range(contents.shape[1]): # For every row of subplots
         if(len(variable_names) == 1): # This is needed to enable the plotting of one dimensional systems
             dim = (1)
@@ -545,62 +560,37 @@ def show_plots(contents, sim_data, coefs, feats, time_series, variable_names):
     fig.subplots_adjust(hspace=0.3) # Add vertical space in between each row of subplots so they don't overlap
     fig.tight_layout() # Remove excess whitespace from the top and bottom of the figure
 
-    # The if statement (only the next line) is a temporary fix as the following scrollbar code doesn't work, however the contents of the statement should be kept when fixed
-    if(len(variable_names) <4):
-        try:
-            manager = plt.get_current_fig_manager() # Get the current figure manager
-            item_text = [widget_object.iconText() for widget_object in manager.toolbar.actions()] # Get the text of each of the widgets in the ouput plot's toolbar
-            pos = item_text.index("Save") # The index number of the save button in the toolbar items on the output plot
+    # set up a canvas with scrollbars
+    canvas = tk.Canvas(canvas_frame)
+    canvas.grid(row=1, column=1, sticky=tk.constants.NSEW)
 
-            # Remap pressing the save button to the custom "save_output" function
-            manager.toolbar.actions()[pos].triggered.disconnect()
-            manager.toolbar.actions()[pos].triggered.connect(lambda: save_output(fig, coefs, feats, variable_names))
+    xScrollbar = tk.Scrollbar(canvas_frame, orient=tk.constants.HORIZONTAL)
+    yScrollbar = tk.Scrollbar(canvas_frame)
 
-            fig.show() # This line is also temporary so that systems with a small number of dimensions can be displayed. The number is capped to 3 dims as larger systems would be too large to be displayed
-        except Exception: # Catch an exception if something goes wrong remapping the save button
-            messagebox.showerror(title="Output Plot Error", message="Error displaying the output plots.")
-            return None
+    xScrollbar.grid(row=2, column=1, sticky=tk.constants.EW)
+    yScrollbar.grid(row=1, column=2, sticky=tk.constants.NS)
 
-    ### The following code should work to embed the figure into a scrollable PyQt5 window, although I'm unsure as to why it doesn't. For now I have commented it out, but it should be looked at
+    # Add the commands to allow scrolling
+    canvas.config(xscrollcommand=xScrollbar.set)
+    xScrollbar.config(command=canvas.xview)
+    canvas.config(yscrollcommand=yScrollbar.set)
+    yScrollbar.config(command=canvas.yview)
 
-    # # Create the Qt widget to embed the figure canvas into
-    # qapp = QtWidgets.QApplication([])
+    # Plug the figure into the canvas
+    figAgg = FigureCanvasTkAgg(fig, canvas)
+    mplCanvas = figAgg.get_tk_widget()
 
-    # widget = QtWidgets.QWidget()
-    # widget.setLayout(QtWidgets.QVBoxLayout())
-    # widget.layout().setContentsMargins(0,0,0,0)
-    # widget.layout().setSpacing(0)
+    # Connect figure with scrolling region
+    cwid = canvas.create_window(0, 0, window=mplCanvas, anchor=tk.constants.NW)
+    canvas.config(scrollregion=canvas.bbox(tk.constants.ALL),width=fig_w,height=fig_h)
 
-    # # Embed the figure in a canvas and create the scrollbar that enables if the canvas is larger than the Qt widget area
-    # canvas = FigureCanvas(fig)
-    # canvas.draw()
-    # scroll = QtWidgets.QScrollArea(widget)
-    # scroll.setWidget(canvas)
-    
-    # # Obtain the navigation toolbar object and add this and the scrollbar to the Qt widget
-    # nav = NavigationToolbar(canvas, widget)
-    # widget.layout().addWidget(nav)
-    # widget.layout().addWidget(scroll)
+    # Add in the toolbar to the output window
+    toolbar_frame = tk.Frame(plot_window)
+    toolbar = NavigationToolbar2Tk(figAgg, toolbar_frame)
+    toolbar.children['!button5'].config(command=lambda: save_output(fig, coefs, feats, variable_names))
+    toolbar_frame.grid(row=0, column=1)
 
-    # # Create a bespoke save button widget that saves a .png of the figure, and a .csv of the coefficient matrix
-    # save_button = QtWidgets.QPushButton()
-    # nav.addWidget(save_button) # Add save button to the Qt widget
-    # save_button.setText("Save Output")
-    # save_button.clicked.connect(lambda: save_output(fig, coefs, feats, variable_names)) # Bind pressing the save button with the save function
-
-    # # Set Qt widget height to (number of rows on figure)*215, or a default of 645 (fig_h) if there are greater than 3 rows on the figure
-    # if(len(variable_names) < 3):
-    #     height = len(variable_names)*(fig_h/3)
-    # else:
-    #     height = fig_h
-
-    # widget.setMaximumWidth(fig_w) # Set the width of the Qt widget to the width of the figure
-    # widget.resize(fig_w,int(height))
-
-    # # Show the final Qt window
-    # widget.show() 
-    # qapp.exec_()
-    # sys.exit(qapp.exec_()) 
+    return plot_window
 
 # Save the output figure & coefficient matrix to file
 def save_output(fig, coefs, feats, variable_names):
@@ -683,10 +673,13 @@ def comp():
 
     conds = np.array([float(val) for val in contents[0]]) # Convert the system's initial conditions into a numpy array of float values as this is what is expected by the model.simulate() function
     sim_data = model.simulate(conds,time_series) # Create the forward simulated data. This uses the original initial conditions evolved with the model output equations to obtain new data
-    show_plots(contents, sim_data, coefs, feats, time_series, variable_names) # Show the output plots
+    plot_window = show_plots(contents, sim_data, coefs, feats, time_series, variable_names, window_name) # Show the output plots
 
     table_size = len(contents[0]) # Obtain the number of system variables, used to define the number of columns in the output table
-    show_output(table_size, coefs, feats, variable_names, window_name, score) # Show the output coefficient and equation window
+    out_window = show_output(table_size, coefs, feats, variable_names, window_name, score) # Show the output coefficient and equation window
+
+    out_window.mainloop()
+    plot_window.mainloop()
 
 # GUI design
 
