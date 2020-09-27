@@ -3,6 +3,7 @@
 
 # Import all required modules
 try:
+    import pkg_resources.py2_warn
     import sys
     from sys import platform # Used to detect the operating system used by the user to change the dimensions of the GUI
     import tkinter as tk # tkinter is the GUI module used for this project
