@@ -5,7 +5,6 @@
 ## Table of contents
 * [Introduction](#introduction)
 * [Getting Started](#getting-started)
-	* [Prerequisite](#prerequisite)
 	* [Installing](#installing)
 * [Usage](#usage)
 	* [Running SEED 2.0](#running-SEED)
@@ -22,28 +21,41 @@ SEED 2.0 has a simple and intuitive Graphical User Interface (GUI) so that resea
 
 ## Getting Started
 
-### Prerequisite
+### Installing
 Currently, SEED 2.0 has only been tested on Windows and MacOS. Although it may be able to run on other operating systems, results may vary.
 
-In order to run SEED 2.0, the user must have a current Python installation, that can be downloaded from the [Python website](https://www.python.org/downloads/).
+First, download the files from the SEED 2.0 GitHub page. Press the green _Code_ button on the top left and download zip. When downloaded, unzip the downloaded files.After downloading these source files, save them in the same folder anywhere you would like.
+
+There are 2 ways to run SEED 2.0:
+
+* Application:
+
+SEED 2.0 can be run directly from its executable application. This can be found in the _Applications_ folder included in the downloaded files. 
+<br/> If you are running SEED 2.0 on MacOS, unzip the file: _SEED2\_0.app.zip_.
+<br/> If you are running SEED 2.0 on Windows, unzip the file: _SEED2\_0.exe.zip_.
+
+* Code Files:
+
+In order to run SEED 2.0 from the code files, the user must have a current Python installation, that can be downloaded from the [Python website](https://www.python.org/downloads/).
 
 As well as the base Python installation, it is vital to install the Python modules needed for the programme to run. You can do this by running these commands in the terminal or command line:
 
 * Mac - terminal: 
 
-> _python3 -m pip install matplotlib pysindy pandas PyQt5_
+> _python3 -m pip install matplotlib pysindy pandas_
 
 * Windows - command line:
 
 > _python -m pip install matplotlib pysindy pandas_
 
-### Installing
-After following the above steps to install the required Python modules, download the source files from GitHub, save all of the files in the same folder anywhere you would like.
-
 ## Usage
 
 ### Running SEED 2.0
-To run SEED 2.0, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software.
+If running SEED 2.0 from the application, just double click it as with any other application.
+
+To run SEED 2.0 from the code files, open the Python IDLE (included with the Python download) and open the file _SEED2\_0.py_. Click _Run > Run Module_ on the toolbar to run the software.
+
+Alternatively, SEED 2.0 can be run through Jupyter Notebook. The notebook file _SEED2\_0.ipynb_ is included for this purpose.
 
 The GUI will start up and will look like this:
 
@@ -103,6 +115,7 @@ As well as the current features of PySINDy integrated into SEED 2.0, there are a
 * Integrating SINDy with control
 * The usage of different forms of input data, as shown on the PySINDy [feature overview](https://github.com/dynamicslab/pysindy/blob/master/examples/1_feature_overview.ipynb)
 * Adding tooltips explaining each of the options
+* Support for the sindy_derivative options
 
 ## License
 The MIT License is used for this software. For more information see: [License info](https://github.com/M-Vause/SEED2.0/blob/master/LICENSE)
