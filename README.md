@@ -36,7 +36,7 @@ SEED 2.0 can be run directly from its executable application. This can be found 
 
 * Code Files:
 
-In order to run SEED 2.0 from the code files, the user must have a current Python installation, that can be downloaded from the [Python website](https://www.python.org/downloads/).
+In order to run SEED 2.0 from the code files, the user must have a current Python installation, that can be downloaded from the [Python website](https://www.python.org/downloads/). If running SEED 2.0 on a Windows system, ensure to select the add python to path option during installation.
 
 As well as the base Python installation, it is vital to install the Python modules needed for the programme to run. You can do this by running these commands in the terminal or command line:
 
@@ -103,7 +103,7 @@ The second output window displays two sets of plots. The first set shows the coe
 
 Pressing the save button on this window saves both a _.png_ of the output plots and a _.csv_ of the output coefficient matrix to the filepath selected.
 
-Both example output windows are the MacOS versions. On Windows, only systems of up to three dimensions are plotted due to an issue with the figure plotting. A fix is being worked on.
+Both example output windows are the MacOS versions.
 
 ## Future Developments
 As well as the current features of PySINDy integrated into SEED 2.0, there are a number of features currently in development to be released in the near future. This includes but is not limited to:
