@@ -30,9 +30,8 @@ There are 2 ways to run SEED 2.0:
 
 * Application:
 
-SEED 2.0 can be run directly from its executable application. This can be found in the _Applications_ folder included in the downloaded files. 
+If you are running SEED 2.0 from MacOS, it can be run directly from its executable application. This can be found in the _Applications_ folder included in the downloaded files. 
 <br/> If you are running SEED 2.0 on MacOS, unzip the file: _SEED2\_0.app.zip_.
-<br/> If you are running SEED 2.0 on Windows, unzip the file: _SEED2\_0.exe.zip_.
 
 * Code Files:
 
